@@ -18,14 +18,6 @@ class Bot:
         else: 
             return None
 
-    def send_keyboard(self, chat_id):
-        """ Makes virtual telegram keyboard """
-        url = self.url + 'sendMessage'
-        buttons = [['Current Weather'], ['Help', 'About']]
-        keyboard = {'keyboard': buttons, 'resize_keyboard': True}
-        answer = {'chat_id': chat_id, 'text': '', 'reply_markup': keyboard}
-        r = requests.post(url, json=answer)
-
     def send_message(self, chat_id, text):
         """ Sends message """
         url = self.url + 'sendMessage'

@@ -11,25 +11,18 @@ bot = tgbot.Bot(config.tokens['bot'])
 weather = weatherapi.Weather(config.tokens['weather'])
 maker = render.Render()
 
+admins = (0, 0)
 
 tg_commands = {'Help': bot.help,
                'About': bot.about,
                '/help': bot.help,
                '/about': bot.about}
 
-weather_commands = {'Current Weather': [weather.get_current, maker.make_current],
-                    '/current': [weather.get_current, maker.make_current]}
-
-queue = dict()
-
-
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
         r = request.get_json()
         data = bot.get_data(r)
-
-        global queue
 
         if not data == None:
 
