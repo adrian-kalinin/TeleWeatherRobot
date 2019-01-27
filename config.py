@@ -1,2 +1,3 @@
 tokens = {'bot': '',
-          'weather': ''}
+          'weather': '',
+          'geocoding': ''}

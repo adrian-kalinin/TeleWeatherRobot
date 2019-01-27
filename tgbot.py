@@ -11,9 +11,7 @@ class Bot:
         """ Takes useful data from update """     
         if 'text' in r['message']:
             data = {'chat_id': r['message']['chat']['id'],
-                    'text': r['message']['text'],
-                    'name': r['message']['chat']['first_name'],
-                    'username': r['message']['chat']['username']}
+                    'text': r['message']['text']}
             return data
         else: 
             return None
@@ -21,7 +19,7 @@ class Bot:
     def send_message(self, chat_id, text):
         """ Sends message """
         url = self.url + 'sendMessage'
-        answer = {'chat_id': chat_id, 'text': text}
+        answer = {'chat_id': chat_id, 'text': text, 'offset': 'UTF-8'}
         r = requests.post(url, json=answer)
 
     def send_photo(self, chat_id, im):
@@ -33,30 +31,20 @@ class Bot:
 
     def help(self, chat_id):
         """ Sends help message """
-        text = ('Here is small tutorial how to use this bot.\n'
-                '1. Choose and press mode like "Current Weather" or any other.\n'
-                '2. Enter name of desired city.\n'
-                '3. Get your weather and enjoy.')
+        text = ('Просто введите название любого города, района, улицы или даже название торгового центра и получите погоду этого места в визуальном формате.')
         self.send_message(chat_id, text)
 
     def about(self, chat_id):
         """ Sends about message """
-        text = ('This bot has been made by two young and perspective guys from Russia. '
-                'We used Python with module requests to work with telegram api, module pillow to make pictures and no more.\n'
-                'Developers:\n'
-                '@a1f20 - backend programmer.\n'
-                '@cantstopwontstop - UI/UX developer.\n')
+        text = ('Разработчики:\n'
+                '@a1f20 - бэкэнд программист.\n'
+                '@dead_insider - фронтэнд разработчик.\n')
         self.send_message(chat_id, text)
 
     def start(self, chat_id):
         """ Sends start message and makes virtual keyboard """
-        text = ('Hello! Thanks for using our bot.\n'
-                'To see more information read /help and /about.')
-        url = self.url + 'sendMessage'
-        buttons = [['Current Weather'], ['Help', 'About']]
-        keyboard = {'keyboard': buttons, 'resize_keyboard': True}
-        answer = {'chat_id': chat_id, 'text': text, 'reply_markup': keyboard}
-        r = requests.post(url, json=answer)
+        text = ('Спасибо за использование нашего бота, сначала рекомендуем прочитать /help и /about.')
+        self.send_message(chat_id, text)
 
     def send_cat(self, chat_id):
         """ Sends cat :D """
