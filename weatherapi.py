@@ -34,26 +34,27 @@ class Weather:
     def get_weather(self, name):
         """ Gets current weather """
         geo = self.get_geo(name)
-        if not geo == None:
-            request = self.weather_url + f'{str(geo["lat"])},{str(geo["lng"])}?exclude=minutely,daily,alerts,flags&lang=ru&units=si&timezone=Tampa'
+        if geo:
+            request = (self.weather_url + f'{str(geo["lat"])},{str(geo["lng"])}'
+                       + '?exclude=minutely,daily,alerts,flags&lang=ru&units=si&timezone=Tampa')
             r = requests.get(request).json()
 
-            if not r == None:
+            if r:
                 weather = {'country': geo['country'],
-                        'city': geo['city'],
-                        'time': datetime.now(timezone(r['timezone'])).strftime('%H:%M'),
-                        'summary': r['currently']['summary'],
-                        'apparentTemperature': r['currently']['apparentTemperature'],
-                        'temperature': r['currently']['temperature'],
-                        'wind': r['currently']['windSpeed'],
-                        'humidity': r['currently']['humidity'],
-                        'icon': r['currently']['icon'],
-                        '+2': r['hourly']['data'][2]['temperature'],
-                        '+4': r['hourly']['data'][4]['temperature'],
-                        '+6': r['hourly']['data'][6]['temperature'],
-                        '+8': r['hourly']['data'][8]['temperature'],
-                        '+10': r['hourly']['data'][10]['temperature'],
-                        '+12': r['hourly']['data'][12]['temperature']}
+                           'city': geo['city'],
+                           'time': datetime.now(timezone(r['timezone'])).strftime('%H:%M'),
+                           'summary': r['currently']['summary'],
+                           'apparentTemperature': r['currently']['apparentTemperature'],
+                           'temperature': r['currently']['temperature'],
+                           'wind': r['currently']['windSpeed'],
+                           'humidity': r['currently']['humidity'],
+                           'icon': r['currently']['icon'],
+                           '+2': r['hourly']['data'][2]['temperature'],
+                           '+4': r['hourly']['data'][4]['temperature'],
+                           '+6': r['hourly']['data'][6]['temperature'],
+                           '+8': r['hourly']['data'][8]['temperature'],
+                           '+10': r['hourly']['data'][10]['temperature'],
+                           '+12': r['hourly']['data'][12]['temperature']}
 
                 return weather
-        return None
+            
