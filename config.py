@@ -4,5 +4,6 @@ geocoding_token = ''  # API-token from Google Geocoding API
 
 admins = (0,)  # telegram ids of admins
 
-host = ''  # ip address
-port = 0  # 443, 80, 88 or 8443
+webhook_host = ''  # where your bot is running
+webhook_port = 0  # 443, 80, 88 or 8443
+webhook_listen = '0.0.0.0'  # or probably ip address

@@ -1,11 +1,11 @@
-import sys, os, textwrap
+import os, textwrap
 from PIL import Image, ImageFont, ImageDraw
 from io import BytesIO
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import interpolate
 
-from .constants import messages
+from bot.constants import messages
 
 
 class Render:
@@ -35,7 +35,7 @@ class Render:
         buf.close()
         plot = self.png_crop(plot)
 
-        grad = Image.open(f'{self.path}/resources/{icon}_grad.png').convert('RGBA')
+        grad = Image.open(f'{self.path}/resources/card/{icon}_grad.png').convert('RGBA')
         back = Image.new('RGBA', grad.size, (255, 255, 255, 0))
 
         plot = plot.resize(grad.size, resample=Image.ANTIALIAS)
@@ -55,8 +55,7 @@ class Render:
         cropped_box = rgb_image.getbbox()
 
         if image_box != cropped_box:
-            cropped = image.crop(cropped_box)
-        return cropped
+            return image.crop(cropped_box)
 
     def make_hourly(self, data, lang):
         city = data['city']
@@ -69,18 +68,17 @@ class Render:
         bw_divs = [79, 186, 293, 400, 507, 614, 721]
 
         im = Image.new('RGBA', (800, 656), (255, 255, 255, 0))
-        bg = Image.open(self.path + '/backgrounds/' + data['icon']
-                        + '.png').convert("RGBA")
-        card = Image.open(self.path + '/resources/card.png')
-        ic = Image.open(self.path + '/icons/' + data['icon'] + '.png')
+        bg = Image.open(f'{self.path}/resources/backgrounds/' + data['icon'] + '.png').convert("RGBA")
+        card = Image.open(f'{self.path}/resources/card/card.png')
+        ic = Image.open(f'{self.path}/resources/icons/' + data['icon'] + '.png')
         ic.thumbnail((999, 180), resample=Image.ANTIALIAS)
-        wind_ic = Image.open(self.path + '/icons/wind_ic.png')
-        hum_ic = Image.open(self.path + '/icons/hum_ic.png')
+        wind_ic = Image.open(f'{self.path}/resources/icons/wind_ic.png')
+        hum_ic = Image.open(f'{self.path}/resources/icons/hum_ic.png')
         txt = Image.new('RGBA', im.size, (255, 255, 255, 0))
         graph = self.make_graph(temp_chart, data['icon'])
 
-        font_h = self.path + '/fonts/ObjectSans-Heavy.otf'
-        font_l = self.path + '/fonts/ObjectSans-Regular.otf'
+        font_h = f'{self.path}/resources/fonts/ObjectSans-Heavy.otf'
+        font_l = f'{self.path}/resources/fonts/ObjectSans-Regular.otf'
 
         temp_font = ImageFont.truetype(font=font_h, size=108)
         temp_chart_font_now = ImageFont.truetype(font=font_h, size=25)
