@@ -1,19 +1,26 @@
 # TeleWeatherBot
 Telegram bot that shows weather in visual format. Try it out - t.me/TeleWeatherRobot
 
+# User Usage
+
+Just enter a name of any city, district, street or even a name of the shopping center. Bot's algorithms recognize location from any sentence, even from such - “Yo, tell me the weather on Nevsky Prospekt!”
+
+![Example](https://github.com/adreex/TeleWeatherRobot/blob/master/example_for_readmre.png)
+
+
 # Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 
-Instructions below are specified only for Linux and probably for MacOS.
+Instructions below are specified only for Linux and MacOS.
 
 # Configuration config.py
 1. Create a Telegram Bot at **t.me/BotFather** and get the token of your bot, then put it as `bot_token` variable.
 2. Go to **darksky.net**, get your API-key for `darksky_key`.
 3. And you have to get the last one token `geocoding_token` at Google Geocoding API.
 4. Then you can enter for `admins` some ids of users who can make mass mailing.
-5. Fill your `host` and `port` (443, 80, 88 or 8443).
+5. Fill your `webhook_host ` and `webhook_port` (443, 80, 88 or 8443).
 
 # Deployment
 1. Generate quick'n'dirty SSL certificate:
