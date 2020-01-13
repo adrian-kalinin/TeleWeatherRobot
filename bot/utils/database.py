@@ -51,22 +51,31 @@ class DataBase:
         return self.__fetch_data('SELECT SUM(requests) FROM users')
 
     def set_language(self, user_id, data):
-        if self.if_users_exists(user_id):
-            self.__make_request('UPDATE users SET language = (?) WHERE user_id = (?)', (data, user_id))
+        if not self.if_users_exists(user_id):
+            self.add_user(user_id)
+        self.__make_request('UPDATE users SET language = (?) WHERE user_id = (?)', (data, user_id))
 
     def get_language(self, user_id):
+        if not self.if_users_exists(user_id):
+            self.add_user(user_id)
         return self.__fetch_data('SELECT language FROM users WHERE user_id = (?)', (user_id, ))
 
     def set_requests(self, user_id, data):
-        if self.if_users_exists(user_id):
-            self.__make_request('UPDATE users SET requests = (?) WHERE user_id = (?)', (data, user_id))
+        if not self.if_users_exists(user_id):
+            self.add_user(user_id)
+        self.__make_request('UPDATE users SET requests = (?) WHERE user_id = (?)', (data, user_id))
 
     def get_requests(self, user_id):
+        if not self.if_users_exists(user_id):
+            self.add_user(user_id)
         return self.__fetch_data('SELECT requests FROM users WHERE user_id = (?)', (user_id, ))
 
     def set_favourite(self, user_id, data):
-        if self.if_users_exists(user_id):
-            self.__make_request('UPDATE users SET favourite = (?) WHERE user_id = (?)', (data, user_id))
+        if not self.if_users_exists(user_id):
+            self.add_user(user_id)
+        self.__make_request('UPDATE users SET favourite = (?) WHERE user_id = (?)', (data, user_id))
 
     def get_favourite(self, user_id):
+        if not self.if_users_exists(user_id):
+            self.add_user(user_id)
         return self.__fetch_data('SELECT favourite FROM users WHERE user_id = (?)', (user_id, ))
