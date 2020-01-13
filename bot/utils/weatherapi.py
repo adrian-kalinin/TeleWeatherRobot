@@ -8,29 +8,28 @@ class WeatherAPI:
         self.weather_token = weather_token
         self.geo_token = geo_token
         self.weather_url = f'https://api.darksky.net/forecast/{self.weather_token}/'
-        self.geo_url = 'https://maps.googleapis.com/maps/api/geocode/'
+        self.geo_url = 'https://geocoder.ls.hereapi.com/6.2/geocode.json'
 
-    def get_geo(self, address, language):
-        request = self.geo_url + f'json?address={address}&key={self.geo_token}&language={language}'
-        response = requests.get(request).json()
-        results = dict()
+    def get_geo(self, address):
+        request = self.geo_url + f'?apiKey={self.geo_token}&searchtext={address}'
+        response = requests.get(request)
 
-        if response['status'] == 'OK':
-            address = response['results'][0]['address_components']
+        if response.status_code == 200:
+            if raw_data:= response.json()['Response']['View']:
+                location = raw_data[0]['Result'][0]['Location']
 
-            for item in address:
-                if 'country' in item['types']:
-                    results['country'] = item['long_name']
-                if 'locality' in item['types'] or 'sublocality' in item['types'] or 'postal_town' in item['types']:
-                    results['city'] = item['long_name']
-
-            results.update(response['results'][0]['geometry']['location'])
-            return results
+                return {
+                    'lat': location['DisplayPosition']['Latitude'],
+                    'lng': location['DisplayPosition']['Longitude'],
+                    'country':location['Address']['Label'].split(' ')[-1],  # bruh
+                    'city': location['Address']['District'] if 'District' in location['Address']
+                        else location['Address']['City']
+                }
 
     def get_weather(self, name, language):
-        if geo := self.get_geo(name, language):
-            lat = str(geo["lat"])
-            lng = str(geo["lng"])
+        if geo := self.get_geo(name):
+            lat = str(geo['lat'])
+            lng = str(geo['lng'])
 
             response = requests.get(
                 f'{self.weather_url}{lat},{lng}?lang={language}'

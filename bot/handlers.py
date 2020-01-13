@@ -51,7 +51,7 @@ def handle_text(bot, message):
     with DataBase() as db:
         language = db.get_language(message.chat.id)
 
-        weather = WeatherAPI(config.darksky_token, config.geocoding_token)
+        weather = WeatherAPI(config.darksky_token, config.geocoder_token)
         info = weather.get_weather(message.text, language=language)
 
         if info:

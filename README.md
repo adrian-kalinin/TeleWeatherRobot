@@ -3,7 +3,7 @@ Telegram bot that shows weather in visual format. Try it out - t.me/TeleWeatherR
 
 # User Usage
 
-Just enter a name of any city, district, street or even a name of the shopping center. Bot's algorithms recognize location from any sentence, even from such - “Yo, tell me the weather on Nevsky Prospekt!”
+Just enter a name of any city, district or even street to be more accurate. 
 
 ![Example](https://github.com/adreex/TeleWeatherRobot/blob/master/example_for_readmre.png)
 
@@ -17,10 +17,9 @@ Instructions below are specified only for Linux and MacOS.
 
 # Configuration config.py
 1. Create a Telegram Bot at **t.me/BotFather** and get the token of your bot, then put it as `bot_token` variable.
-2. Go to **darksky.net**, get your API-key for `darksky_key`.
-3. And you have to get the last one token `geocoding_token` at Google Geocoding API.
-4. Then you can enter for `admins` some ids of users who can make mass mailing.
-5. Fill your `webhook_host ` and `webhook_port` (443, 80, 88 or 8443).
+2. Go to **darksky.net**, get your API-key for `darksky_token`.
+3. And you have to get the last one token `geocoder_token` from **developer.here.com**.
+4. Fill your `webhook_host` and `webhook_port` (443, 80, 88 or 8443).
 
 # Deployment
 1. Generate quick'n'dirty SSL certificate:
@@ -31,7 +30,7 @@ openssl req -new -x509 -days 3650 -key webhook_pkey.pem -out webhook_cert.pem
 When asked for "Common Name (e.g. server FQDN or YOUR name)" you should reply with the same value as your server's ip addres
 
 
-2. Create virtual environment for Python and install all requiremetns:
+2. Create virtual environment for Python and install all requirements:
 ```
 virtualenv venv --python=python3
 source venv/bin/activate
