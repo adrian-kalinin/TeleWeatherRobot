@@ -1,4 +1,3 @@
-from threading import Thread
 from telebot import TeleBot
 from telebot.types import Update
 from aiohttp import web
@@ -13,37 +12,37 @@ bot = TeleBot(config.bot_token)
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
-    Thread(target=handlers.handle_start, args=(bot, message)).start()
+    handlers.handle_start(bot, message)
 
 
 @bot.message_handler(commands=['help'])
 def handle_help(message):
-    Thread(target=handlers.handle_help, args=(bot, message)).start()
+    handlers.handle_help(bot, message)
 
 
 @bot.message_handler(func=lambda msg: msg.text in buttons['settings'].values())
 def handle_settings(message):
-    Thread(target=handlers.handle_settings, args=(bot, message)).start()
+    handlers.handle_settings(bot, message)
 
 
 @bot.message_handler(func=lambda msg: msg.text in buttons['statistics'].values())
 def handle_statistics(message):
-    Thread(target=handlers.handle_statistics, args=(bot, message)).start()
+    handlers.handle_statistics(bot, message)
 
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
-    Thread(target=handlers.handle_text, args=(bot, message)).start()
+    handlers.handle_text(bot, message)
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'add')
 def callback_inline_add(call):
-    Thread(target=handlers.callback_inline_add, args=(bot, call)).start()
+    handlers.callback_inline_add(bot, call)
 
 
 @bot.callback_query_handler(func=lambda call: 'change_lang' in call.data)
 def callback_inline_change_lang(call):
-    Thread(target=handlers.callback_inline_change_lang, args=(bot, call)).start()
+    handlers.callback_inline_change_lang(bot, call)
 
 
 async def webhook_handle(request):
