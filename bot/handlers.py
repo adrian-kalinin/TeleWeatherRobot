@@ -1,8 +1,9 @@
 from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+import time
 
 import config
 from .constants import messages, buttons
-from .utils import DataBase, WeatherAPI, Render
+from .utils import DataBase, WeatherAPI, Render, CounterBase
 
 
 def handle_start(bot, message):
@@ -48,25 +49,37 @@ def handle_statistics(bot, message):
 
 
 def handle_text(bot, message):
-    with DataBase() as db:
-        language = db.get_language(message.chat.id)
+    with CounterBase() as cb:
+        while cb.get_count() >= config.limit:
+            time.sleep(0.5)
 
-        weather = WeatherAPI(config.darksky_token, config.geocoder_token)
-        info = weather.get_weather(message.text, language=language)
+        cb.increment()
 
-        if info:
-            image = Render().make_hourly(info, language)
+        try:
+            with DataBase() as db:
+                language = db.get_language(message.chat.id)
 
-            keyboard = InlineKeyboardMarkup()
-            callback_button = InlineKeyboardButton(text=messages['make_favourite'][language], callback_data='add')
-            keyboard.add(callback_button)
+                weather = WeatherAPI(config.darksky_token, config.geocoder_token)
+                info = weather.get_weather(message.text, language=language)
 
-            bot.send_photo(message.chat.id, image, reply_markup=keyboard, caption=f'{info["city"]}, {info["country"]}')
+                if info:
+                    image = Render().make_hourly(info, language)
 
-            requests = db.get_requests(message.from_user.id)
-            db.set_requests(message.from_user.id, requests + 1)
-        else:
-            bot.send_message(message.chat.id, messages['failed'][language])
+                    keyboard = InlineKeyboardMarkup()
+                    callback_button = InlineKeyboardButton(text=messages['make_favourite'][language], callback_data='add')
+                    keyboard.add(callback_button)
+
+                    bot.send_photo(message.chat.id, image, reply_markup=keyboard, caption=f'{info["city"]}, {info["country"]}')
+
+                    requests = db.get_requests(message.from_user.id)
+                    db.set_requests(message.from_user.id, requests + 1)
+                else:
+                    bot.send_message(message.chat.id, messages['failed'][language])
+
+        except Exception:
+            pass
+
+        cb.decrement()
 
 
 def callback_inline_add(bot, call):
